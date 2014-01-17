@@ -24,6 +24,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+echo "Hello";
+
 define("VERSION", "1.0");
 
 register_activation_hook(__FILE__, 'iss_jj_set_default_options');
