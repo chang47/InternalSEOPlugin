@@ -46,7 +46,7 @@ function iss_jj_set_default_options() {
 	if(get_option('iss_jj_options') === false) {
 		$new_options['ga_account_name'] = 'UA-000000-0';
 		$new_options['track_outgoing_links'] = "false";
-		$new_options['default_check'] = "true";
+		$new_options['ra'] = "true";
 		$new_options['version'] = VERSION;
 		add_option('iss_jj_options', $new_options);
 	}
@@ -67,6 +67,33 @@ function iss_jj_link_adder($content) {
 	}
 	$content .= '</p>';
 	$content .= '<p> Return back to <a href=" ' . site_url() . '">Home' . '</a></p>';
+	$tags = get_tags();
+	foreach ($tags as $tag) {
+		$content .= '<br />' .$tag->term-id . '  ' . $tag->name;
+	}
+	
+	foreach ($tags as $tag) {
+		$url = '';
+		$query = new WP_Query('tag=daasd');
+		if($query->have_posts()) : $query -> the_post();
+			$url = get_permalink();
+		endif;
+		$query = new WP_Query('tag=daasd');
+		$pos = strpos($content, $tag->name);
+		if($pos ==! false) {
+			$content = substr_replace($content, '<a href="' . $url . '">' .$tag->name . '</a>', $pos, strlen($tag->name));
+		}
+	}
+	
+
+		$query = new WP_Query('tag=daasd');
+	
+		//while($query->have_posts()) : $query -> the_post(); //infinite loop?
+		//	echo get_permalink();
+		//endwhile;
+		while($query->have_posts()) : $query -> the_post();
+			echo get_permalink();
+		endwhile;
 	return $content;
 }
 
@@ -109,7 +136,7 @@ function iss_jj_admin_init() {
 		array('name' => 'ga_account_name'));
 	
 	add_settings_field(  
-		'Radio_Button_Elements',  
+		'ra 	',  
 		'Radio Button',  
 		'sandbox_radio_element_callback',  
 		'iss_jj_settings_section',  
