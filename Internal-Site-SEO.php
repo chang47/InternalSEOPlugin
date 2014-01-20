@@ -44,7 +44,7 @@ add_action( 'admin_menu', 'iss_jj_settings_menu' );
 // Sets the defualt options for the plugin
 function iss_jj_set_default_options() {
 	if(get_option('iss_jj_options') === false) {
-		$new_options['ga_account_name'] = 'UA-000000-0';
+		$new_options['num_of_interlink'] = 3;
 		$new_options['track_outgoing_links'] = "false";
 		$new_options['ra'] = "true";
 		$new_options['version'] = VERSION;
@@ -74,13 +74,12 @@ function iss_jj_link_adder($content) {
 	
 	foreach ($tags as $tag) {
 		$url = '';
-		$query = new WP_Query('tag=daasd');
-		if($query->have_posts()) : $query -> the_post();
-			$url = get_permalink();
-		endif;
-		$query = new WP_Query('tag=daasd');
 		$pos = strpos($content, $tag->name);
 		if($pos ==! false) {
+			$query = new WP_Query('tag=daasd');
+			if($query->have_posts()) : $query -> the_post();
+				$url = get_permalink();
+			endif;
 			$content = substr_replace($content, '<a href="' . $url . '">' .$tag->name . '</a>', $pos, strlen($tag->name));
 		}
 	}
@@ -88,9 +87,6 @@ function iss_jj_link_adder($content) {
 
 		$query = new WP_Query('tag=daasd');
 	
-		//while($query->have_posts()) : $query -> the_post(); //infinite loop?
-		//	echo get_permalink();
-		//endwhile;
 		while($query->have_posts()) : $query -> the_post();
 			echo get_permalink();
 		endwhile;
@@ -108,12 +104,12 @@ function iss_jj_admin_init() {
 		'iss_jj_main_setting_section_callback', 
 		'iss_jj_settings_section');
 	
-	add_settings_field('ga_account_name', 
-		'Account Name', 
+	add_settings_field('num_of_interlink', 
+		'Number of links per post', 
 		'iss_jj_display_text_field', 
 		'iss_jj_settings_section', 
 		'iss_jj_main_section', 
-		array('name' => 'ga_account_name'));
+		array('name' => 'num_of_interlink'));
 		
 	add_settings_field( 'track_outgoing_links',
 		'Track Outgoing Links',
@@ -133,14 +129,9 @@ function iss_jj_admin_init() {
 		'iss_jj_display_text_area', 
 		'iss_jj_settings_section', 
 		'iss_jj_main_section', 
-		array('name' => 'ga_account_name'));
+		array('name' => 'num_of_interlink'));
 	
-	add_settings_field(  
-		'ra 	',  
-		'Radio Button',  
-		'sandbox_radio_element_callback',  
-		'iss_jj_settings_section',  
-		'iss_jj_main_section'); 
+
 }
 
 //Validates that the user is using the correct version
