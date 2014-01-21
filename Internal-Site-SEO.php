@@ -45,8 +45,8 @@ add_action( 'admin_menu', 'iss_jj_settings_menu' );
 function iss_jj_set_default_options() {
 	if(get_option('iss_jj_options') === false) {
 		$new_options['num_of_interlink'] = 3;
-		$new_options['track_outgoing_links'] = "false";
-		$new_options['ra'] = "true";
+		$new_options['link_to_category'] = "true";
+		new_options['link_to_home'] = "true";
 		$new_options['version'] = VERSION;
 		add_option('iss_jj_options', $new_options);
 	}
@@ -111,25 +111,19 @@ function iss_jj_admin_init() {
 		'iss_jj_main_section', 
 		array('name' => 'num_of_interlink'));
 		
-	add_settings_field( 'track_outgoing_links',
-		'Track Outgoing Links',
-		'iss_jj_display_check_box',
+	add_settings_field( 'link_to_category',
+		'Link to category?',
+		'iss_jj_display_link_category',
 		'iss_jj_settings_section',
 		'iss_jj_main_section',
-		array( 'name' => 'track_outgoing_links'));
+		array( 'name' => 'link_to_category'));
 		
-	add_settings_field( 'Select_List', 'Select List',
-		'iss_jj_select_list',
-		'iss_jj_settings_section', 'iss_jj_main_section',
-		array( 'name' => 'Select_List',
-		'choices' => array( 'First', 'Second', 'Third', 'Fourth' ) ) );
-	
-	add_settings_field('Text_Field', 
-		'Text Field', 
-		'iss_jj_display_text_area', 
-		'iss_jj_settings_section', 
-		'iss_jj_main_section', 
-		array('name' => 'num_of_interlink'));
+	add_settings_field( 'link_to_home',
+		'Link to home?',
+		'iss_jj_display_link_homepage',
+		'iss_jj_settings_section',
+		'iss_jj_main_section',
+		array( 'name' => 'link_to_home'));
 	
 
 }
@@ -159,7 +153,7 @@ function iss_jj_display_text_field( $data = array() ) {
 }
 
 //Displays the check box field for the admin page
-function iss_jj_display_check_box( $data = array() ) {
+function iss_jj_display_link_category( $data = array() ) {
 	extract ( $data );
 	$options = get_option( 'iss_jj_options' );
 	?>
@@ -167,44 +161,20 @@ function iss_jj_display_check_box( $data = array() ) {
 	name="iss_jj_options[<?php echo $name; ?>]"
 	<?php if ( $options[$name] ) echo ' checked="checked"';
 	?>/>
-<?php }
-
-function iss_jj_select_list( $data = array() ) {
-	extract($data);
-	$options = get_option('iss_jj_options');
-	?>
-	<select name="iss_jj_options[<?php echo $name; ?>]'>
-	<?php foreach( $choices as $item ) { ?>
-	<option value="<?php echo $item; ?>"
-	<?php selected( $options[$name] == $item ); ?>>
-	<?php echo $item; ?></option>;
-	<?php } ?>
-	</select>
-	<?php
-}
-
-function iss_jj_display_text_area( $data = array() ) {
-	extract ( $data );
-	$options = get_option( 'iss_jj_options' );
-	?>
-	<textarea type="text"
-	name="ch3sapi_options[<?php echo $name; ?>]"
-	rows="5" cols="30">
-	<?php echo esc_html ( $options[$name] ); ?></textarea>
 	<?php 
 }
 
-function sandbox_radio_element_callback() {
-	$options = get_option( 'iss_jj_options' );  
-      
-    $html = '<input type="radio" id="radio_example_one" name="sandbox_theme_input_examples[radio_example]" value="1"' . checked( 1, $options['radio_example'], false ) . '/>';  
-    $html .= '<label for="radio_example_one">One</label>';  
-      
-    $html .= '<br /><input type="radio" id="radio_example_two" name="sandbox_theme_input_examples[radio_example]" value="2"' . checked( 2, $options['radio_example'], false ) . '/>';  
-    $html .= '<label for="radio_example_two">Two</label>';  
-      
-    echo $html;  
+function iss_jj_display_link_homepage( $data = array() ) {
+	extract ( $data );
+	$options = get_option( 'iss_jj_options' );
+	?>
+	<input type="checkbox"
+	name="iss_jj_options[<?php echo $name; ?>]"
+	<?php if ( $options[$name] ) echo ' checked="checked"';
+	?>/>
+	<?php 
 }
+
 
 //Adds the admin page to the setting
 function iss_jj_settings_menu() {
