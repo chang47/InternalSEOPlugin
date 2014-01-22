@@ -46,7 +46,8 @@ function iss_jj_set_default_options() {
 	if(get_option('iss_jj_options') === false) {
 		$new_options['num_of_interlink'] = 3;
 		$new_options['link_to_category'] = "true";
-		new_options['link_to_home'] = "true";
+		$new_options['link_to_home'] = "true";
+		$new_options['interlink_pages'] = "true";
 		$new_options['version'] = VERSION;
 		add_option('iss_jj_options', $new_options);
 	}
@@ -124,6 +125,13 @@ function iss_jj_admin_init() {
 		'iss_jj_settings_section',
 		'iss_jj_main_section',
 		array( 'name' => 'link_to_home'));
+		
+	add_settings_field( 'interlink_pages',
+		'Link to home?',
+		'iss_jj_display_interlink_pages',
+		'iss_jj_settings_section',
+		'iss_jj_main_section',
+		array( 'name' => 'interlink_pages'));
 	
 
 }
@@ -174,6 +182,18 @@ function iss_jj_display_link_homepage( $data = array() ) {
 	?>/>
 	<?php 
 }
+
+function iss_jj_display_interlink_pages( $data = array() ) {
+	extract ( $data );
+	$options = get_option( 'iss_jj_options' );
+	?>
+	<input type="checkbox"
+	name="iss_jj_options[<?php echo $name; ?>]"
+	<?php if ( $options[$name] ) echo ' checked="checked"';
+	?>/>
+	<?php 
+}
+
 
 
 //Adds the admin page to the setting
