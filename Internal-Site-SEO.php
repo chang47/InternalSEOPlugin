@@ -67,24 +67,26 @@ function iss_jj_interlink_with_tags($content) {
 	}
 	$count = 0;
 	foreach ($tags as $tag) {
-		$query = new WP_Query($tag->name);//'tag=daasd');
 		$url = '';
 		$pos = strpos($content, $tag->name); // finds the numeric position of the first appearance of the tag
 		echo $count . ' ' . $tag->name . '<br/ >';
 		$count++;
+		$tag1 = $tag->name;
+		echo 'tag1 ' . $tag1 . '<br >'; 
 		if($pos ==! false) { // if tag exists
 			//Problem here! WP Query isn't giving posts with those tags!!!!
-			
-			if($query->have_posts()) : $query -> the_post();
+			$query = new WP_Query('tag='.$tag1);//'tag=daasd');
+			while($query->have_posts()) : $query -> the_post();
 				$url = get_permalink();
-				//echo $url;
-			endif;
+				echo $url . '<br />';
+			endwhile;
+			echo '<p />';
 			wp_reset_postdata();
 			$content = substr_replace($content, '<a href="' . $url . '">' .$tag->name . '</a>', $pos, strlen($tag->name));
 		}
 	}
 	
-
+	//tag works fine when given a specific one.
 	$query = new WP_Query('tag=daasd');//'tag=daasd');
 	
 	while($query->have_posts()) : $query -> the_post(); //traversing through all posts that have tag name daasd
