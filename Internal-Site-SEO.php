@@ -238,7 +238,7 @@ function iss_jj_settings_menu() {
 //Creates the admin page for the user to see.
 function iss_jj_config_page() { ?>
 	<div id="iss_jj-general" class="wrap">
-	<h2>My Google Analytics – Settings API</h2>
+	<h2>Internal-Site SEO - Settings</h2>
 	<form name="iss_jj_options_form_settings_api" method="post"
 	action="options.php">
 	<?php settings_fields( 'iss_jj_settings' ); ?>
