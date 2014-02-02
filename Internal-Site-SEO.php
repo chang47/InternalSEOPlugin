@@ -198,8 +198,8 @@ function iss_jj_display_interlink_pages( $data = array() ) {
 
 //Adds the admin page to the setting
 function iss_jj_settings_menu() {
-	add_options_page( 'My Google Analytics Configuration',
-	'My Google Analytics - Settings API', 'manage_options',
+	add_options_page( 'Internal Site SEO Settings',
+	'Internal Site SEO Settings', 'manage_options',
 	'iss_jj-my-google-analytics',
 	'iss_jj_config_page' );
 }
