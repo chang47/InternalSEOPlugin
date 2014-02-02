@@ -62,28 +62,43 @@ function iss_jj_link_adder($content) {
 
 function iss_jj_interlink_with_tags($content) {
 	$tags = get_tags();
-	foreach ($tags as $tag) {
+	foreach ($tags as $tag) { // appends tags into content
 		$content .= '<br />' .$tag->term-id . '  ' . $tag->name;
 	}
-	
+	$count = 0;
 	foreach ($tags as $tag) {
+		$query = new WP_Query($tag->name);//'tag=daasd');
 		$url = '';
-		$pos = strpos($content, $tag->name);
-		if($pos ==! false) {
-			$query = new WP_Query('tag=daasd');
+		$pos = strpos($content, $tag->name); // finds the numeric position of the first appearance of the tag
+		echo $count . ' ' . $tag->name . '<br/ >';
+		$count++;
+		if($pos ==! false) { // if tag exists
+			//Problem here! WP Query isn't giving posts with those tags!!!!
+			
 			if($query->have_posts()) : $query -> the_post();
 				$url = get_permalink();
+				//echo $url;
 			endif;
+			wp_reset_postdata();
 			$content = substr_replace($content, '<a href="' . $url . '">' .$tag->name . '</a>', $pos, strlen($tag->name));
 		}
 	}
 	
 
-	$query = new WP_Query('tag=daasd');
+	$query = new WP_Query('tag=daasd');//'tag=daasd');
 	
-	while($query->have_posts()) : $query -> the_post();
-		echo get_permalink();
+	while($query->have_posts()) : $query -> the_post(); //traversing through all posts that have tag name daasd
+		$content .= get_permalink();
+		break;
 	endwhile;
+	
+	$content .= '<p />';
+	
+	while($query->have_posts()) {
+		$query -> the_post();
+		$content .= get_permalink();
+		break;
+	}
 	return $content;
 }
 
