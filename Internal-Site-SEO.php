@@ -55,19 +55,12 @@ function iss_jj_set_default_options() {
 
 // Receives the content of the post and adds a link back to the parent category of the post and the homepage
 function iss_jj_link_adder($content) {
-	$categories = get_the_category();
-	if($categories[0]) {
-		$content .= '<p> Return back to <a href="' . get_category_link($categories[0]) . '">' . $categories[0]->name . '</a>';
-		if($categories[1]) {
-			foreach ($categories as $category) {
-				if(!($category->name == $categories[0]->name)) {
-					$content .= ', <a href="' . get_category_link($category) . '">' . $category->name . '</a>';
-				}
-			}
-		}
-	}
-	$content .= '</p>';
-	$content .= '<p> Return back to <a href=" ' . site_url() . '">Home' . '</a></p>';
+	$content = iss_jj_interlink_with_tags($content);
+	$content = iss_jj_return_to_category_home($content);
+	return $content;
+}
+
+function iss_jj_interlink_with_tags($content) {
 	$tags = get_tags();
 	foreach ($tags as $tag) {
 		$content .= '<br />' .$tag->term-id . '  ' . $tag->name;
@@ -86,11 +79,32 @@ function iss_jj_link_adder($content) {
 	}
 	
 
-		$query = new WP_Query('tag=daasd');
+	$query = new WP_Query('tag=daasd');
 	
-		while($query->have_posts()) : $query -> the_post();
-			echo get_permalink();
-		endwhile;
+	while($query->have_posts()) : $query -> the_post();
+		echo get_permalink();
+	endwhile;
+	return $content;
+}
+
+/*
+ * Adds the link back to homepage and category
+ * Returns the content
+*/
+function iss_jj_return_to_category_home($content) {
+	$categories = get_the_category();
+	if($categories[0]) {
+		$content .= '<p> Return back to <a href="' . get_category_link($categories[0]) . '">' . $categories[0]->name . '</a>';
+		if($categories[1]) {
+			foreach ($categories as $category) {
+				if(!($category->name == $categories[0]->name)) {
+					$content .= ', <a href="' . get_category_link($category) . '">' . $category->name . '</a>';
+				}
+			}
+		}
+	}
+	$content .= '</p>';
+	$content .= '<p> Return back to <a href=" ' . site_url() . '">Home' . '</a></p>';
 	return $content;
 }
 
